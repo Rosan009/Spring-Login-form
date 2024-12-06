@@ -34,19 +34,9 @@ public class LoginController {
     public String register() {
         return "register";
     }
-    @GetMapping("display")
-    public String display(Model model ) {
-        List<UserLogin> list = userService.findAllDetail();
-        model.addAttribute("users", list);
-        return "display";
-    }
-    @PutMapping("display")
-    public void update(@RequestParam int id,@RequestParam String username, @RequestParam String email) {
-        System.out.println("Updating user: ID=" + id + ", Username=" + username + ", Email=" + email);
-        userService.updateUser(id,username,email);
-    }
-   @DeleteMapping("display")
-    public void delete(@RequestParam int id) {
-        userService.deleteData(id);
+
+   @GetMapping("/home")
+    public String home() {
+        return "home";
    }
 }
