@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,6 +50,11 @@
         .profile-preview {
             margin-top: 15px;
         }
+
+        .gender-radio {
+            display: inline-block;
+            margin-right: 10px;
+        }
     </style>
 </head>
 
@@ -69,14 +73,14 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h4 class="card-title text-center mb-4">Student Information</h4>
-                    <form action="student/addStudent" method="POST" enctype="multipart/form-data">
+                    <form  method="POST" action="/student/addStudent"enctype="multipart/form-data">
                         <!-- Profile Icon (Bootstrap Icon) -->
                         <div class="mb-3 profile-container">
                             <label for="profilePhotoInput">
                                 <!-- Bootstrap Icon for Profile -->
                                 <i id="profileIcon" class="bi bi-person profile-icon"></i>
                             </label>
-                            <input type="file" class="form-control" id="profilePhotoInput" name="profilePhoto" accept="image/*" onchange="toggleProfileIcon(event)">
+                            <input type="file" class="form-control" id="profilePhotoInput" name="profilePhoto" accept="image/*" onchange="toggleProfileIcon(event)" >
                             <!-- Profile Image Preview -->
                             <img id="profilePreview" src="" alt="Profile Photo Preview" class="profile-preview" style="display:none;">
                         </div>
@@ -108,6 +112,23 @@
                         <div class="mb-3">
                             <label for="dob" class="form-label">Date of Birth</label>
                             <input type="date" class="form-control" id="dob" name="dob" required>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="mb-3">
+                            <label class="form-label">Gender</label><br>
+                            <div class="gender-radio">
+                                <input type="radio" id="male" name="gender" value="Male" required>
+                                <label for="male" class="form-label">Male</label>
+                            </div>
+                            <div class="gender-radio">
+                                <input type="radio" id="female" name="gender" value="Female" required>
+                                <label for="female" class="form-label">Female</label>
+                            </div>
+                            <div class="gender-radio">
+                                <input type="radio" id="other" name="gender" value="Other" required>
+                                <label for="other" class="form-label">Other</label>
+                            </div>
                         </div>
 
                         <!-- Form Buttons -->

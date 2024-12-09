@@ -16,6 +16,7 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+
     @GetMapping("/login")
     public String loginForm() {
         System.out.println("loginForm");

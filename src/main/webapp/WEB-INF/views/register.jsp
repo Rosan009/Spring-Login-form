@@ -9,8 +9,8 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="../../../resources/static/assets/img/favicon.png" rel="icon">
+    <link href="../../../resources/static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -26,7 +26,7 @@
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="../../../resources/static/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
 <%--<h1>Register Page</h1>--%>
@@ -46,17 +46,6 @@
         }
     }
 </script>
-<%--<form id="regForm" method="post" onsubmit="return myFunction(event)" action="/register">--%>
-<%--    <label for="username">UserName:</label>--%>
-<%--    <input id="username" name="username" type="text" placeholder="Enter your UserName" required>--%>
-<%--    <label for="email">Email:</label>--%>
-<%--    <input id="email" name="email" type="email" placeholder="Enter your email" required>--%>
-<%--    <label for="password">Password:</label>--%>
-<%--    <input id="password" name="password" type="password" placeholder="Enter your password" required>--%>
-<%--    <label for="confirmPassword">Re-Enter Password:</label>--%>
-<%--    <input id="confirmPassword" type="password" name="confirmPassword" placeholder="Re-enter your password" required>--%>
-<%--    <button type="submit">Submit</button>--%>
-<%--</form>--%>
 <main>
     <div class="container">
 
@@ -68,7 +57,6 @@
                         <div class="d-flex justify-content-center py-4">
                             <a href="index.html" class="logo d-flex align-items-center w-auto">
                                 <img src="assets/img/logo.png" alt="">
-                                <span class="d-none d-lg-block">N-Admin</span>
                             </a>
                         </div><!-- End Logo -->
 
@@ -146,6 +134,6 @@
 <script src="assets/vendor/php-email-form/validate.js"></script>
 
 <!-- Template Main JS File -->
-<script src="assets/js/main.js"></script>
+<script src="../../../resources/static/assets/js/main.js"></script>
 </body>
 </html>

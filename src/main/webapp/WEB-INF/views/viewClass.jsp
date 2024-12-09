@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,19 +41,18 @@
                         </thead>
                         <tbody>
                         <!-- Loop through student list and display their data dynamically -->
-                        <c:forEach var="student" items="${students}">
+                        <c:forEach var="i" begin="1" end="12">
                             <tr>
-                                <td>Class ${student.studentClass}</td>
-                                <!-- Subject Button -->
+                                <td>Class ${i}</td>
                                 <td>
-                                    <a href="/student/studentSubject" class="btn btn-success">
+                                    <a href="/student/studentSubject/${i}" class="btn btn-success">
                                         View Subjects
                                     </a>
                                 </td>
                                 <!-- Class Button -->
                                 <td>
-                                    <a href="/student/studentList" class="btn btn-info">
-                                        View student
+                                    <a href="/student/studentList/${i}" class="btn btn-info">
+                                        View Student
                                     </a>
                                 </td>
                             </tr>

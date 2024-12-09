@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -5,59 +6,98 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mark List</title>
+    <title>Mark Entry</title>
 
     <!-- Vendor CSS Files -->
     <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="../../../resources/static/assets/css/style.css" rel="stylesheet">
 </head>
 
 <body>
-<!-- Header Section -->
-<header class="bg-primary text-white text-center py-3">
-    <h1>Mark List</h1>
-    <p class="lead">View and manage marks for the students</p>
+
+<!-- Header Section with Improved Layout -->
+<header class="bg-primary text-white text-center py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Profile Picture Section -->
+            <div class="col-md-3 text-center mb-4 mb-md-0">
+                <c:if test="${not empty profilePhotoBase64}">
+                    <img src="data:image/jpeg;base64,${profilePhotoBase64}" alt="Profile Photo" class="img-thumbnail" style="width: 150px; height: 150px;">
+                </c:if>
+            </div>
+
+            <!-- Student Information Section -->
+            <div class="col-md-9 text-center text-md-left">
+                <h1 class="display-4">${students[0].name}</h1>
+                <h3>Class: ${students[0].className}</h3>
+                <h4>Register No: ${students[0].registerNo}</h4>
+                <h5>Date of Birth: ${students[0].dataOfBirth}</h5>
+                <h5>Gender: ${students[0].gender}</h5>
+            </div>
+        </div>
+    </div>
 </header>
 
-<!-- Main Content -->
-<section class="container mt-4">
+<!-- Main Content for Mark Entry -->
+<section class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <!-- Mark List Table -->
+            <!-- Mark Entry Form -->
             <div class="card shadow">
                 <div class="card-body">
-                    <h4 class="card-title text-center mb-4">Marks for Subject: ${subjectName}</h4>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Class</th>
-                            <th>Registration Number</th>
-                            <th>Marks</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- Loop through students for this subject and display their marks -->
-                        <c:forEach var="student" items="${students}">
+                    <h4 class="card-title text-center mb-4">Enter Marks for Subjects</h4>
+                    <form action="/saveMarks" method="post">
+                        <table class="table table-bordered text-center">
+                            <thead>
                             <tr>
-                                <td>${student.name}</td>
-                                <td>Class ${student.studentClass}</td>
-                                <td>${student.regNo}</td>
-                                <td>
-                                    <input type="number" class="form-control" name="marks_${student.regNo}" value="${student.marks}" min="0" max="100">
-                                </td>
-                                <td>
-                                    <!-- Button to save/update marks -->
-                                    <button class="btn btn-success" onclick="saveMarks(${student.regNo})">Save</button>
-                                </td>
+                                <th>Subject Name</th>
+                                <th>Enter Marks</th>
                             </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="subject" items="${subjects}">
+                                <tr>
+                                    <td>${subject.subject1}</td>
+                                    <td>
+                                        <input type="number" class="form-control" name="marks_${subject.id}_1" placeholder="Enter Marks" min="0" max="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>${subject.subject2}</td>
+                                    <td>
+                                        <input type="number" class="form-control" name="marks_${subject.id}_2" placeholder="Enter Marks" min="0" max="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>${subject.subject3}</td>
+                                    <td>
+                                        <input type="number" class="form-control" name="marks_${subject.id}_3" placeholder="Enter Marks" min="0" max="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>${subject.subject4}</td>
+                                    <td>
+                                        <input type="number" class="form-control" name="marks_${subject.id}_4" placeholder="Enter Marks" min="0" max="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>${subject.subject5}</td>
+                                    <td>
+                                        <input type="number" class="form-control" name="marks_${subject.id}_5" placeholder="Enter Marks" min="0" max="100">
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                Submit Marks
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -65,21 +105,11 @@
 </section>
 
 <!-- Footer -->
-<footer class="bg-light text-center text-muted py-3 mt-4">
+<footer class="bg-light text-center text-muted py-3 mt-5">
     &copy; 2024 Class Management System. All Rights Reserved.
 </footer>
 
 <!-- Vendor JS Files -->
 <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    function saveMarks(studentRegNo) {
-        // Implement functionality to save/update the marks for the student
-        alert('Marks for student ' + studentRegNo + ' saved!');
-        // Make an AJAX call to save the marks
-    }
-</script>
-
 </body>
-
 </html>

@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +13,7 @@
     <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="../../../resources/static/assets/css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -38,6 +39,7 @@
                             <th>Registration Number</th>
                             <th>Date of Birth</th>
                             <th>Profile Photo</th>
+                            <th>Gender</th> <!-- New column for Gender -->
                             <th>Mark</th> <!-- New column for Mark Button -->
                         </tr>
                         </thead>
@@ -46,17 +48,23 @@
                         <c:forEach var="student" items="${students}">
                             <tr>
                                 <td>${student.name}</td>
-                                <td>Class ${student.studentClass}</td>
-                                <td>${student.regNo}</td>
-                                <td>${student.dob}</td>
+                                <td>Class ${student.className}</td>
+                                <td>${student.registerNo}</td>
+                                <td>${student.dataOfBirth}</td>
                                 <td>
-                                    <img src="<c:out value='${student.profilePhoto}' />" alt="Profile Photo" class="img-thumbnail" style="width: 100px; height: 100px;">
+                                    <c:if test="${not empty student.profilePhotoBase64}">
+                                        <img src="data:image/data:type;base64,${student.profilePhotoBase64}" alt="Profile Photo" class="img-thumbnail" style="width: 100px; height: 100px;">
+                                    </c:if>
                                 </td>
+
+                                <td>${student.gender}</td> <!-- Display Gender -->
                                 <td>
                                     <!-- Mark Button -->
-                                    <a href="/student/studentList/studentMark" class="btn btn-warning">
+                                    <a href="${student.className}/studentMark/${student.registerNo}" class="btn btn-warning">
                                         Add Marks
                                     </a>
+
+
                                 </td>
                             </tr>
                         </c:forEach>
