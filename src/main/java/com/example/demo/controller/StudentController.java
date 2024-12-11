@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Mark;
 import com.example.demo.model.Student;
 import com.example.demo.model.Subject;
+import com.example.demo.repo.MarkRepo;
 import com.example.demo.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("student")
@@ -21,7 +24,8 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
-
+    @Autowired
+    private MarkRepo markRepo;
     @PostMapping(value = "addStudent")
     public void addStudent(HttpServletRequest request,@RequestParam("profilePhoto") MultipartFile profilePhoto) throws IOException {
         Student student = new Student();
@@ -58,7 +62,24 @@ public class StudentController {
         }
         return "studentMark";
     }
+    @PostMapping("studentList/{classList}/studentMark/{registerNo}")
+    public void StudentMarkList(@PathVariable("classList") int classList, @PathVariable("registerNo") int registerNo,HttpServletRequest request){
 
+        List<Subject> studentSubject = studentService.getSubject("Class " + classList);
+        List<Student> studentDetail = studentService.getDetailStudent(registerNo);
+        Student student = studentDetail.get(0);
+        Subject subject=studentSubject.get(0);
+        Mark mark=new Mark();
+        HashMap<String,Integer> map = new HashMap<>();
+        map.put(subject.getSubject1(), Integer.valueOf(request.getParameter("subject1")));
+        map.put(subject.getSubject2(), Integer.valueOf(request.getParameter("subject2")));
+        map.put(subject.getSubject3(), Integer.valueOf(request.getParameter("subject3")));
+        map.put(subject.getSubject4(), Integer.valueOf(request.getParameter("subject4")));
+        map.put(subject.getSubject5(), Integer.valueOf(request.getParameter("subject5")));
+        mark.setStudent(student.getName());
+        mark.setSubjectMarks(map);
+        markRepo.save(mark);
+    }
 
     @GetMapping("studentSubject/{classList}")
     public String StudentSubject(@PathVariable("classList") int classList, Model model) {

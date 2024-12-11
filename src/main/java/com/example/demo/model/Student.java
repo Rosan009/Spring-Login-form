@@ -7,8 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Base64;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Data
@@ -28,7 +27,9 @@ public class Student {
     private String imageType;
     @Lob
     private byte[] imageData;
-
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "student_id")
+    private List<Subject> subjects = new ArrayList<>();
     public String getProfilePhotoBase64() {
         if (this.imageData != null) {
             return Base64.getEncoder().encodeToString(this.imageData);

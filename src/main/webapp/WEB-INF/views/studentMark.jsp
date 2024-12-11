@@ -49,7 +49,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h4 class="card-title text-center mb-4">Enter Marks for Subjects</h4>
-                    <form action="/saveMarks" method="post">
+                    <form action="/student/studentList/${students[0].className}/studentMark/${students[0].registerNo}" method="POST">
                         <table class="table table-bordered text-center">
                             <thead>
                             <tr>
@@ -62,31 +62,31 @@
                                 <tr>
                                     <td>${subject.subject1}</td>
                                     <td>
-                                        <input type="number" class="form-control" name="marks_${subject.id}_1" placeholder="Enter Marks" min="0" max="100">
+                                        <input type="number" class="form-control" name="subject1" placeholder="Enter Marks" min="0" max="100">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>${subject.subject2}</td>
                                     <td>
-                                        <input type="number" class="form-control" name="marks_${subject.id}_2" placeholder="Enter Marks" min="0" max="100">
+                                        <input type="number" class="form-control" name="subject2" placeholder="Enter Marks" min="0" max="100">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>${subject.subject3}</td>
                                     <td>
-                                        <input type="number" class="form-control" name="marks_${subject.id}_3" placeholder="Enter Marks" min="0" max="100">
+                                        <input type="number" class="form-control" name="subject3" placeholder="Enter Marks" min="0" max="100">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>${subject.subject4}</td>
                                     <td>
-                                        <input type="number" class="form-control" name="marks_${subject.id}_4" placeholder="Enter Marks" min="0" max="100">
+                                        <input type="number" class="form-control" name="subject4" placeholder="Enter Marks" min="0" max="100">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>${subject.subject5}</td>
                                     <td>
-                                        <input type="number" class="form-control" name="marks_${subject.id}_5" placeholder="Enter Marks" min="0" max="100">
+                                        <input type="number" class="form-control" name="subject5" placeholder="Enter Marks" min="0" max="100">
                                     </td>
                                 </tr>
                             </c:forEach>

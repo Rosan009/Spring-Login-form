@@ -35,4 +35,8 @@ public class StudentService {
     public List<Student> getDetailStudent(int registerNo) {
         return studentRepo.findByRegisterNo(registerNo);
     }
+
+    public void addMark(Student student) {
+        studentRepo.save(student);
+    }
 }
