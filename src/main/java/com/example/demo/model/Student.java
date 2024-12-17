@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,9 +28,10 @@ public class Student {
     private String imageType;
     @Lob
     private byte[] imageData;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "student_id")
-    private List<Subject> subjects = new ArrayList<>();
+    @JsonManagedReference
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "mark-id")
+    private List<Mark> marks;
     public String getProfilePhotoBase64() {
         if (this.imageData != null) {
             return Base64.getEncoder().encodeToString(this.imageData);

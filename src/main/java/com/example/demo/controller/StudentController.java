@@ -76,7 +76,8 @@ public class StudentController {
         map.put(subject.getSubject3(), Integer.valueOf(request.getParameter("subject3")));
         map.put(subject.getSubject4(), Integer.valueOf(request.getParameter("subject4")));
         map.put(subject.getSubject5(), Integer.valueOf(request.getParameter("subject5")));
-        mark.setStudent(student.getName());
+        mark.setStudentName(student.getName());
+        mark.setStudentRegisterNo(student.getRegisterNo());
         mark.setSubjectMarks(map);
         markRepo.save(mark);
     }
