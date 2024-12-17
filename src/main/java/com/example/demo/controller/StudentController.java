@@ -27,7 +27,7 @@ public class StudentController {
     @Autowired
     private MarkRepo markRepo;
     @PostMapping(value = "addStudent")
-    public void addStudent(HttpServletRequest request,@RequestParam("profilePhoto") MultipartFile profilePhoto) throws IOException {
+    public String addStudent(HttpServletRequest request,@RequestParam("profilePhoto") MultipartFile profilePhoto) throws IOException {
         Student student = new Student();
         student.setName(request.getParameter("studentName"));
         student.setClassName(request.getParameter("studentClass"));
@@ -38,6 +38,7 @@ public class StudentController {
         student.setImageType(profilePhoto.getContentType());
         student.setImageData(profilePhoto.getBytes());
         studentService.addStudent(student);
+        return "redirect:/home";
     }
     @GetMapping("addStudent")
     public String addStudent() {
@@ -63,8 +64,7 @@ public class StudentController {
         return "studentMark";
     }
     @PostMapping("studentList/{classList}/studentMark/{registerNo}")
-    public void StudentMarkList(@PathVariable("classList") int classList, @PathVariable("registerNo") int registerNo,HttpServletRequest request){
-
+    public String StudentMarkList(@PathVariable("classList") int classList, @PathVariable("registerNo") int registerNo,HttpServletRequest request){
         List<Subject> studentSubject = studentService.getSubject("Class " + classList);
         List<Student> studentDetail = studentService.getDetailStudent(registerNo);
         Student student = studentDetail.get(0);
@@ -79,7 +79,15 @@ public class StudentController {
         mark.setStudentName(student.getName());
         mark.setStudentRegisterNo(student.getRegisterNo());
         mark.setSubjectMarks(map);
+        mark.setStudent(student); // Set the student reference in Mark
+//        student.addMark(mark);    // Add mark to student's list of marks
+
+        // Save student (CascadeType.ALL will save marks too)
+        studentService.addMark(student);
+
         markRepo.save(mark);
+
+        return "redirect:/home";
     }
 
     @GetMapping("studentSubject/{classList}")
