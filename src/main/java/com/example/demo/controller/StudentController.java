@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Exam;
 import com.example.demo.model.Mark;
 import com.example.demo.model.Student;
 import com.example.demo.model.Subject;
+import com.example.demo.repo.ExamRepo;
 import com.example.demo.repo.MarkRepo;
 import com.example.demo.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +28,8 @@ public class StudentController {
     private StudentService studentService;
     @Autowired
     private MarkRepo markRepo;
+    @Autowired
+    private ExamRepo examRepo;
     @PostMapping(value = "addStudent")
     public String addStudent(HttpServletRequest request,@RequestParam("profilePhoto") MultipartFile profilePhoto) throws IOException {
         Student student = new Student();
@@ -98,4 +102,10 @@ public class StudentController {
         return "studentSubject";
     }
 
+    @GetMapping("examList/{classList}")
+    public String examList(@PathVariable("classList") int classList, Model model){
+        List<Exam> exam=examRepo.findByClassList("Class "+ classList);
+        model.addAttribute("exams",exam);
+        return "examList";
+    }
 }

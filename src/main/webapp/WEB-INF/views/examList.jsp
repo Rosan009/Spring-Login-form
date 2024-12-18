@@ -1,12 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Details</title>
+    <title>Exam List</title>
 
     <!-- Vendor CSS Files -->
     <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -19,48 +19,38 @@
 <body>
 <!-- Header Section -->
 <header class="bg-primary text-white text-center py-3">
-    <h1>Student Details</h1>
-    <p class="lead">View student class and subject information below</p>
+    <h1>Exam List</h1>
+    <p class="lead">View exams scheduled for all classes below</p>
 </header>
 
 <!-- Main Content -->
 <section class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <!-- Student Details Table -->
+            <!-- Exam List Table -->
             <div class="card shadow">
                 <div class="card-body">
-                    <h4 class="card-title text-center mb-4">Student List</h4>
+                    <h4 class="card-title text-center mb-4">Exam Schedule</h4>
                     <table class="table table-bordered">
                         <thead>
                         <tr>
                             <th>Class</th>
-                            <th>Subject</th>
-                            <th>view Class</th>
-                            <th>Exam</th>
+                            <th>Exams</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <!-- Loop through student list and display their data dynamically -->
-                        <c:forEach var="i" begin="1" end="12">
+                        <!-- Loop through exam list and display data dynamically -->
+                        <c:forEach var="exam" items="${exams}">
                             <tr>
-                                <td>Class ${i}</td>
+                                <td>${exam.classList}</td>
                                 <td>
-                                    <a href="/student/studentSubject/${i}" class="btn btn-success">
-                                        View Subjects
-                                    </a>
+                                    <ul class="list-group">
+                                        <!-- Looping through the exam names array -->
+                                        <c:forEach var="examName" items="${exam.examNames}">
+                                            <li class="list-group-item">${examName}</li>
+                                        </c:forEach>
+                                    </ul>
                                 </td>
-                                <!-- Class Button -->
-                                <td>
-                                    <a href="/student/studentList/${i}" class="btn btn-info">
-                                        View Student
-                                    </a>
-                                </td>
-                                <td>
-                                 <a href="/student/examList/${i}" class="btn btn-info">
-                                    View Exam
-                                     </a>
-                                 </td>
                             </tr>
                         </c:forEach>
                         </tbody>

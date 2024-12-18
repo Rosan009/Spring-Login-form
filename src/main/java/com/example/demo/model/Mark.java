@@ -33,5 +33,4 @@ public class Mark {
     @Column(name = "marks")
     private Map<String, Integer> subjectMarks;
 
-
 }
