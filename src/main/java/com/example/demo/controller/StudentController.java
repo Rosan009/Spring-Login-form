@@ -65,6 +65,10 @@ public class StudentController {
             model.addAttribute("students", studentDetail);
             model.addAttribute("profilePhotoBase64", profilePhotoBase64);
         }
+        List<Exam>exam=examRepo.findByClassList("Class " + classList);
+        Exam e=exam.get(0);
+        List<String> arr =e.getExamNames();
+        model.addAttribute("exams",arr);
         return "studentMark";
     }
     @PostMapping("studentList/{classList}/studentMark/{registerNo}")
@@ -83,10 +87,8 @@ public class StudentController {
         mark.setStudentName(student.getName());
         mark.setStudentRegisterNo(student.getRegisterNo());
         mark.setSubjectMarks(map);
-        mark.setStudent(student); // Set the student reference in Mark
-//        student.addMark(mark);    // Add mark to student's list of marks
-
-        // Save student (CascadeType.ALL will save marks too)
+        mark.setStudent(student);
+        mark.setTotal(map.get(subject.getSubject1())+map.get(subject.getSubject2())+map.get(subject.getSubject3())+map.get(subject.getSubject4())+map.get(subject.getSubject5()));
         studentService.addMark(student);
 
         markRepo.save(mark);

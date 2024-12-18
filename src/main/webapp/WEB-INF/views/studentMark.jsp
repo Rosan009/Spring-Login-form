@@ -50,6 +50,15 @@
                 <div class="card-body">
                     <h4 class="card-title text-center mb-4">Enter Marks for Subjects</h4>
                     <form action="/student/studentList/${students[0].className}/studentMark/${students[0].registerNo}" method="POST">
+                        <div class="mb-3">
+                          <label for="studentClass" class="form-label">Class</label>
+                          <select class="form-select" id="studentExam" name="studentExam" required>
+                          <option value="" selected disabled>Select exam</option>
+                          <% for (int i = 1; i <= 3; i++) { %>
+                          <option value="<%= i %>">{exams}</option>
+                           <% } %>
+                          </select>
+                        </div>
                         <table class="table table-bordered text-center">
                             <thead>
                             <tr>

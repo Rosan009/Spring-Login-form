@@ -32,5 +32,6 @@ public class Mark {
     @MapKeyColumn(name = "subject")
     @Column(name = "marks")
     private Map<String, Integer> subjectMarks;
-
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int total;
 }
