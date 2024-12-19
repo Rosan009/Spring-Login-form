@@ -32,12 +32,6 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "mark-id")
     private List<Mark> marks;
-    @Column(name = "Quarterly-Exam-mark", nullable = false, columnDefinition = "integer default 0")
-    private int Quarterly;
-    @Column(name = "Half-Yearly-Exam-mark", nullable = false, columnDefinition = "integer default 0")
-    private int HalfYearly;
-    @Column(name = "Annual-Exam-mark", nullable = false, columnDefinition = "integer default 0")
-    private int annual;
     public String getProfilePhotoBase64() {
         if (this.imageData != null) {
             return Base64.getEncoder().encodeToString(this.imageData);

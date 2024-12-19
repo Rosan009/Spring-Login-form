@@ -26,12 +26,14 @@ public class Mark {
     @ManyToOne
     @JoinColumn(name = "student_id") // This creates the foreign key in Mark table
     private Student student;
-
-
     @ElementCollection
     @MapKeyColumn(name = "subject")
     @Column(name = "marks")
     private Map<String, Integer> subjectMarks;
-    @Column(nullable = false, columnDefinition = "integer default 0")
-    private int total;
+    @Column(name = "Quarterly-Exam-mark", nullable = false, columnDefinition = "integer default 0")
+    private int Quarterly;
+    @Column(name = "Half-Yearly-Exam-mark", nullable = false, columnDefinition = "integer default 0")
+    private int HalfYearly;
+    @Column(name = "Annual-Exam-mark", nullable = false, columnDefinition = "integer default 0")
+    private int annual;
 }

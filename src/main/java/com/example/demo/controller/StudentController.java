@@ -88,7 +88,27 @@ public class StudentController {
         mark.setStudentRegisterNo(student.getRegisterNo());
         mark.setSubjectMarks(map);
         mark.setStudent(student);
-        mark.setTotal(map.get(subject.getSubject1())+map.get(subject.getSubject2())+map.get(subject.getSubject3())+map.get(subject.getSubject4())+map.get(subject.getSubject5()));
+        Exam exam=new Exam();
+        for(String val: exam.getExamNames())
+        {
+            if (String.valueOf(request.getParameter("exam")).equals(val))
+            {
+                String examType = request.getParameter("exam");
+                int examMark=(Integer.parseInt(request.getParameter("subject1"))
+                +Integer.parseInt(request.getParameter("subject2"))
+                +Integer.parseInt(request.getParameter("subject3"))
+                +Integer.parseInt(request.getParameter("subject4"))
+                +Integer.parseInt(request.getParameter("subject5")));
+                if ("Quarterly Exam".equals(examType)) {
+                    mark.setQuarterly(examMark);
+                } else if ("Half-Yearly Exam".equals(examType)) {
+                    mark.setHalfYearly(examMark);
+                } else if ("Annual Exam".equals(examType)) {
+                    mark.setAnnual(examMark);
+                }
+                System.out.println("total value ="+examMark);
+            }
+        }
         studentService.addMark(student);
 
         markRepo.save(mark);
