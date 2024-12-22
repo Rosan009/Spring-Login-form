@@ -71,7 +71,7 @@ public class StudentController {
         model.addAttribute("exams",arr);
         return "studentMark";
     }
-    @PostMapping("studentList/{classList}/studentMark/{registerNo}")
+    @PutMapping("studentList/{classList}/studentMark/{registerNo}")
     public String StudentMarkList(@PathVariable("classList") int classList, @PathVariable("registerNo") int registerNo,HttpServletRequest request){
         List<Subject> studentSubject = studentService.getSubject("Class " + classList);
         List<Student> studentDetail = studentService.getDetailStudent(registerNo);
@@ -89,7 +89,7 @@ public class StudentController {
         mark.setSubjectMarks(map);
         mark.setStudent(student);
         Exam exam=new Exam();
-        for(String val: exam.getExamNames())
+        for(Exam val: examRepo.findByClassList(String.valueOf(classList)))
         {
             if (String.valueOf(request.getParameter("exam")).equals(val))
             {
@@ -106,7 +106,7 @@ public class StudentController {
                 } else if ("Annual Exam".equals(examType)) {
                     mark.setAnnual(examMark);
                 }
-                System.out.println("total value ="+examMark);
+                System.out.println("total value = "+ examMark);
             }
         }
         studentService.addMark(student);

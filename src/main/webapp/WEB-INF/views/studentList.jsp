@@ -63,8 +63,6 @@
                                     <a href="${student.className}/studentMark/${student.registerNo}" class="btn btn-warning">
                                         Add Marks
                                     </a>
-
-
                                 </td>
                             </tr>
                         </c:forEach>

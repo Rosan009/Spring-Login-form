@@ -18,19 +18,4 @@ public class UserService  {
         user.setPassword(bCryptPasswordEncode.encode(user.getPassword()));
        return repoLogin.save(user);
     }
-
-    public List<UserLogin> findAllDetail() {
-       return repoLogin.findAll();
-    }
-
-    public void updateUser(int id, String username, String email) {
-        UserLogin user = repoLogin.findById(id).get();
-        user.setUsername(username);
-        user.setEmail(email);
-        repoLogin.save(user);
-    }
-
-    public void deleteData(int id) {
-        repoLogin.deleteById(id);
-    }
 }
