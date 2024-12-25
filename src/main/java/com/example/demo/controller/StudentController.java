@@ -1,13 +1,13 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Exam;
-import com.example.demo.model.Mark;
-import com.example.demo.model.Student;
-import com.example.demo.model.Subject;
+import com.example.demo.model.*;
+import com.example.demo.repo.AnnualRepo;
 import com.example.demo.repo.ExamRepo;
-import com.example.demo.repo.MarkRepo;
+import com.example.demo.repo.HalfYearlyRepo;
+import com.example.demo.repo.QuarterlyRepo;
 import com.example.demo.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("student")
@@ -27,7 +27,11 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
     @Autowired
-    private MarkRepo markRepo;
+    private QuarterlyRepo quarterlyRepo;
+    @Autowired
+    private HalfYearlyRepo halfYearlyRepo;
+    @Autowired
+    private AnnualRepo annualRepo;
     @Autowired
     private ExamRepo examRepo;
     @PostMapping(value = "addStudent")
@@ -56,7 +60,7 @@ public class StudentController {
     }
     @GetMapping("studentList/{classList}/studentMark/{registerNo}")
     public String StudentMark(@PathVariable("classList") int classList, @PathVariable("registerNo") int registerNo, Model model) {
-        List<Subject> studentSubject = studentService.getSubject("Class " + classList);
+        List<Subject> studentSubject = studentService.getSubject("class"+classList);
         model.addAttribute("subjects", studentSubject);
         List<Student> studentDetail = studentService.getDetailStudent(registerNo);
         if (!studentDetail.isEmpty()) {
@@ -65,60 +69,96 @@ public class StudentController {
             model.addAttribute("students", studentDetail);
             model.addAttribute("profilePhotoBase64", profilePhotoBase64);
         }
-        List<Exam>exam=examRepo.findByClassList("Class " + classList);
+        List<Exam>exam=examRepo.findByClassList("class" + classList);
         Exam e=exam.get(0);
         List<String> arr =e.getExamNames();
         model.addAttribute("exams",arr);
         return "studentMark";
     }
-    @PutMapping("studentList/{classList}/studentMark/{registerNo}")
-    public String StudentMarkList(@PathVariable("classList") int classList, @PathVariable("registerNo") int registerNo,HttpServletRequest request){
-        List<Subject> studentSubject = studentService.getSubject("Class " + classList);
+    @Transactional
+    @PostMapping("studentList/{classList}/studentMark/{registerNo}")
+    public String StudentMarkList(@PathVariable("classList") int classList, @PathVariable("registerNo") int registerNo, HttpServletRequest request) {
+        // Fetch the subjects and student details based on class and register number
+        List<Subject> studentSubject = studentService.getSubject("class" + classList);
         List<Student> studentDetail = studentService.getDetailStudent(registerNo);
-        Student student = studentDetail.get(0);
-        Subject subject=studentSubject.get(0);
-        Mark mark=new Mark();
-        HashMap<String,Integer> map = new HashMap<>();
-        map.put(subject.getSubject1(), Integer.valueOf(request.getParameter("subject1")));
-        map.put(subject.getSubject2(), Integer.valueOf(request.getParameter("subject2")));
-        map.put(subject.getSubject3(), Integer.valueOf(request.getParameter("subject3")));
-        map.put(subject.getSubject4(), Integer.valueOf(request.getParameter("subject4")));
-        map.put(subject.getSubject5(), Integer.valueOf(request.getParameter("subject5")));
-        mark.setStudentName(student.getName());
-        mark.setStudentRegisterNo(student.getRegisterNo());
-        mark.setSubjectMarks(map);
-        mark.setStudent(student);
-        Exam exam=new Exam();
-        for(Exam val: examRepo.findByClassList(String.valueOf(classList)))
-        {
-            if (String.valueOf(request.getParameter("exam")).equals(val))
-            {
-                String examType = request.getParameter("exam");
-                int examMark=(Integer.parseInt(request.getParameter("subject1"))
-                +Integer.parseInt(request.getParameter("subject2"))
-                +Integer.parseInt(request.getParameter("subject3"))
-                +Integer.parseInt(request.getParameter("subject4"))
-                +Integer.parseInt(request.getParameter("subject5")));
-                if ("Quarterly Exam".equals(examType)) {
-                    mark.setQuarterly(examMark);
-                } else if ("Half-Yearly Exam".equals(examType)) {
-                    mark.setHalfYearly(examMark);
-                } else if ("Annual Exam".equals(examType)) {
-                    mark.setAnnual(examMark);
-                }
-                System.out.println("total value = "+ examMark);
+        Student student = studentDetail.get(0); // Assuming we get the first student from the list
+
+        // Create a list to hold the subject marks
+        List<SubjectMarks> subjectMarksList = new ArrayList<>();
+
+        // Assuming there are 5 subjects, get marks for each
+        for (int i = 1; i <= 5; i++) {
+            String subjectName = null;
+            int subjectMark = 0;
+
+            // Get the subject name and mark based on the subject number
+            switch (i) {
+                case 1:
+                    subjectName = studentSubject.get(0).getSubject1();
+                    break;
+                case 2:
+                    subjectName = studentSubject.get(0).getSubject2();
+                    break;
+                case 3:
+                    subjectName = studentSubject.get(0).getSubject3();
+                    break;
+                case 4:
+                    subjectName = studentSubject.get(0).getSubject4();
+                    break;
+                case 5:
+                    subjectName = studentSubject.get(0).getSubject5();
+                    break;
             }
+
+            // Get the subject mark from the request
+            subjectMark = Integer.parseInt(request.getParameter("subject" + i));
+
+            // Add the subject and marks to the list
+            subjectMarksList.add(new SubjectMarks(subjectName, subjectMark));
         }
-        studentService.addMark(student);
 
-        markRepo.save(mark);
+        // Get the exam type (Quarterly, Half-Yearly, Annual) from the request
+        List<Exam> studentExam = examRepo.findByClassList("class"+ classList);
+        Exam exam = studentExam.get(0);
+        String examType=request.getParameter("studentExam");
 
+        int totalMarks = subjectMarksList.stream().mapToInt(SubjectMarks::getMark).sum(); // Calculate total marks
+
+        // Create and save the appropriate exam entity (Quarterly, Half-Yearly, or Annual)
+        if ("Quarterly".equals(examType)) {
+            Quarterly quarterly = new Quarterly();
+            quarterly.setStudentName(student.getName());
+            quarterly.setStudentRegisterNo(student.getRegisterNo());
+            quarterly.setStudentClass(student.getClassName());
+            quarterly.setSubjectMarks(subjectMarksList);
+            quarterly.calculateTotalMark();
+            quarterlyRepo.save(quarterly);
+        } else if ("Half-Yearly".equals(examType)) {
+            HalfYearly halfYearly = new HalfYearly();
+            halfYearly.setStudentName(student.getName());
+            halfYearly.setStudentRegisterNo(student.getRegisterNo());
+            halfYearly.setStudentClass(student.getClassName());
+            halfYearly.setSubjectMarks(subjectMarksList);
+            halfYearly.calculateTotalMark();
+            halfYearlyRepo.save(halfYearly);
+        } else if ("Annual".equals(examType)) {
+            Annual annual = new Annual();
+            annual.setStudentName(student.getName());
+            annual.setStudentRegisterNo(student.getRegisterNo());
+            annual.setStudentClass(student.getClassName());
+            annual.setSubjectMarks(subjectMarksList);
+            annual.calculateTotalMark();
+            annualRepo.save(annual);
+        }
+        System.out.println("Student Name: " + student.getName());
+        System.out.println("Exam Type: " + examType);
+        System.out.println("Subject Marks: " + subjectMarksList);
         return "redirect:/home";
     }
 
     @GetMapping("studentSubject/{classList}")
     public String StudentSubject(@PathVariable("classList") int classList, Model model) {
-        List<Subject> studentSubject = studentService.getSubject("Class "+classList);
+        List<Subject> studentSubject = studentService.getSubject("class"+classList);
         model.addAttribute("subjects", studentSubject);
         System.out.println(studentSubject.size());
         return "studentSubject";
@@ -126,7 +166,7 @@ public class StudentController {
 
     @GetMapping("examList/{classList}")
     public String examList(@PathVariable("classList") int classList, Model model){
-        List<Exam> exam=examRepo.findByClassList("Class "+ classList);
+        List<Exam> exam=examRepo.findByClassList("class"+classList);
         model.addAttribute("exams",exam);
         return "examList";
     }

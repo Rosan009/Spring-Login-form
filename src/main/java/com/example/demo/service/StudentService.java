@@ -7,6 +7,7 @@ import com.example.demo.repo.SubjectRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -39,4 +40,5 @@ public class StudentService {
     public void addMark(Student student) {
         studentRepo.save(student);
     }
+
 }

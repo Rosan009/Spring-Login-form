@@ -49,7 +49,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h4 class="card-title text-center mb-4">Enter Marks for Subjects</h4>
-                    <form action="/student/studentList/${students[0].className}/studentMark/${students[0].registerNo}" method="PUT">
+                    <form action="/student/studentList/${students[0].className}/studentMark/${students[0].registerNo}" method="POST">
                         <div class="mb-3">
                             <label for="studentClass" class="form-label">Exam</label>
                             <select class="form-select" id="studentExam" name="studentExam" required>

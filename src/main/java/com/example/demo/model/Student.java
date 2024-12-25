@@ -28,10 +28,6 @@ public class Student {
     private String imageType;
     @Lob
     private byte[] imageData;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name = "mark-id")
-    private List<Mark> marks;
     public String getProfilePhotoBase64() {
         if (this.imageData != null) {
             return Base64.getEncoder().encodeToString(this.imageData);
