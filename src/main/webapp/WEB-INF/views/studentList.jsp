@@ -39,8 +39,9 @@
                             <th>Registration Number</th>
                             <th>Date of Birth</th>
                             <th>Profile Photo</th>
-                            <th>Gender</th> <!-- New column for Gender -->
-                            <th>Mark</th> <!-- New column for Mark Button -->
+                            <th>Gender</th>
+                            <th>Mark</th>
+                            <th>View Mark</th> <!-- New column for View Mark -->
                         </tr>
                         </thead>
                         <tbody>
@@ -56,12 +57,17 @@
                                         <img src="data:image/data:type;base64,${student.profilePhotoBase64}" alt="Profile Photo" class="img-thumbnail" style="width: 100px; height: 100px;">
                                     </c:if>
                                 </td>
-
-                                <td>${student.gender}</td> <!-- Display Gender -->
+                                <td>${student.gender}</td>
                                 <td>
-                                    <!-- Mark Button -->
+                                    <!-- Add Mark Button -->
                                     <a href="${student.className}/studentMark/${student.registerNo}" class="btn btn-warning">
                                         Add Marks
+                                    </a>
+                                </td>
+                                <td>
+                                    <!-- View Mark Button -->
+                                    <a href="${student.className}/viewMark/${student.registerNo}" class="btn btn-info">
+                                        View Marks
                                     </a>
                                 </td>
                             </tr>

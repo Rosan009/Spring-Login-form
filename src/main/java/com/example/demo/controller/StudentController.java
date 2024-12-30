@@ -163,6 +163,69 @@ public class StudentController {
         System.out.println(studentSubject.size());
         return "studentSubject";
     }
+    @GetMapping("studentList/{classList}/viewMark/{registerNo}")
+    public String viewMarks(@PathVariable("classList") int classList,
+                            @PathVariable("registerNo") int regNo,
+                            @RequestParam(value = "examtype", required = false) String examType,
+                            Model model) {
+
+        // Get the list of exams for the class
+        List<Exam> exams = examRepo.findByClassList("class" + classList);
+        if (!exams.isEmpty()) {
+            Exam e = exams.get(0);
+            model.addAttribute("exams", e.getExamNames());
+        } else {
+            model.addAttribute("exams", new ArrayList<>()); // No exams found
+        }
+
+        // Get student details
+        List<Student> studentDetails = studentService.getDetailStudent(regNo);
+        if (!studentDetails.isEmpty()) {
+            model.addAttribute("student", studentDetails.get(0));
+        } else {
+            model.addAttribute("student", null);
+            System.out.println("No student found with register number: " + regNo);
+        }
+
+        // Fetch marks and total for the selected exam type
+        List<SubjectMarks> marks = null;
+        Integer totalMark = null;
+        if ("Half-Yearly".equalsIgnoreCase(examType)) {
+            List<HalfYearly> halfYearlyList = halfYearlyRepo.findByStudentRegisterNo(regNo);
+            if (!halfYearlyList.isEmpty()) {
+                HalfYearly halfYearly = halfYearlyList.get(0);
+                marks = halfYearly.getSubjectMarks();
+                totalMark = halfYearly.getTotalMark();
+            }
+        } else if ("Quarterly".equalsIgnoreCase(examType)) {
+            List<Quarterly> quarterlyList = quarterlyRepo.findByStudentRegisterNo(regNo);
+            if (!quarterlyList.isEmpty()) {
+                Quarterly quarterly = quarterlyList.get(0);
+                marks = quarterly.getSubjectMarks();
+                totalMark = quarterly.getTotalMark();
+            }
+        } else if ("Annual".equalsIgnoreCase(examType)) {
+            List<Annual> annualList = annualRepo.findByStudentRegisterNo(regNo);
+            if (!annualList.isEmpty()) {
+                Annual annual = annualList.get(0);
+                marks = annual.getSubjectMarks();
+                totalMark = annual.getTotalMark();
+            }
+        }
+
+        // If no marks found, add null to the model
+        if (marks == null) {
+            model.addAttribute("marks", new ArrayList<>()); // Empty list for frontend handling
+            model.addAttribute("noMarksMessage", "No marks available for the selected exam type.");
+            model.addAttribute("totalMark", null);
+        } else {
+            model.addAttribute("marks", marks);
+            model.addAttribute("totalMark", totalMark);
+            model.addAttribute("noMarksMessage", null);
+        }
+
+        return "viewMark";
+    }
 
     @GetMapping("examList/{classList}")
     public String examList(@PathVariable("classList") int classList, Model model){
